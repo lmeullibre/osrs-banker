@@ -4,8 +4,8 @@ services:
   svelte-sample:
     restart: always
     build: .
-    networks:
-      - proxy
+    ports:
+      - '8080:80'
 
 networks:
   proxy:

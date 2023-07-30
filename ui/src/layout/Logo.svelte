@@ -4,5 +4,5 @@
 </script>
 
 <Link to="">
-  <img class="h-7" src="/img/logo.png" title={_('title')} alt="Codeborne logo">
+  <h1>OSRS Bank Sorter</h1>
 </Link>
