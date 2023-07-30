@@ -68,9 +68,10 @@
 
 <div class="grid grid-cols-8 gap-4">
   {#each selectedItems as item (item.id)}
-    <div class="relative">
+    <div class="relative group">
       <img src={'data:image/png;base64,' + item.icon} alt={item.name} class="w-full h-full object-cover" />
       <div class="absolute top-0 right-0 bg-black bg-opacity-50 text-white px-1 rounded-bl-md">{item.quantity}</div>
+      <div class="opacity-0 group-hover:opacity-100 absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-sm">{item.name}</div>
     </div>
   {/each}
 </div>
