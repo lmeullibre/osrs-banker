@@ -1,13 +1,14 @@
 FROM node:18-alpine as build-ui
 WORKDIR /app
 
+EXPOSE 80
+
 COPY ui/*.json ui/.npmrc ./
 RUN npm ci
 
 COPY ui ./
 RUN npm run build
 RUN npm run check
-
 
 FROM nginx:alpine-slim as final
 
