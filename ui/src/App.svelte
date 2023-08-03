@@ -5,6 +5,7 @@
   import NotFoundPage from './layout/NotFoundPage.svelte'
   import HomePage from 'src/pages/HomePage.svelte'
   import Spinner from 'src/components/Spinner.svelte'
+  import Bank from 'src/components/Bank.svelte'
 </script>
 
 <svelte:head>
@@ -15,14 +16,7 @@
 
 <Router primary={false}>
   <div class="App min-h-screen flex flex-col">
-    <Route path="/" component={HomePage}/>
-    <Route path="/samples/*path" let:params>
-      {#await import('src/samples/SamplesPage.svelte')}
-        <Spinner/>
-      {:then samples}
-        <svelte:component this={samples.default} path={params.path}/>
-      {/await}
-    </Route>
+    <Route path="/" component={Bank}/>
     <Route component={NotFoundPage}/>
   </div>
 </Router>

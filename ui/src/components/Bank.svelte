@@ -1,6 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import selectedItemsData from '../../selected_items.json';
+  import { initializeApp } from "firebase/app";
+  import { get, getDatabase, ref, set } from "firebase/database";
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const id = searchParams.get('id');
+
+  const firebaseConfig = {
+  apiKey: import.meta.env.VITE_APP_API_KEY,
+  authDomain: "osrs-banker.firebaseapp.com",
+  projectId: "osrs-banker",
+  storageBucket: "osrs-banker.appspot.com",
+  messagingSenderId: "218378048399",
+  appId: import.meta.env.VITE_APP_ID, 
+  databaseURL: import.meta.env.VITE_DATABASE_URL
+};
+  const app = initializeApp(firebaseConfig);
+
+  const database = getDatabase(app);
 
   type Item = {
     id: number;
@@ -10,9 +28,8 @@
     quantity: number;
   }
 
-  let selectedItems: Item[] = Object.values(selectedItemsData);
-  const categoriesSet: Set<string> = new Set(selectedItems.flatMap(item => item.categories));
-  let categories: string[] = Array.from(categoriesSet).sort();
+  let selectedItems: Item[] = [];
+  let categories: string[] = [];
   let selectedCategory: string = '';
   let selectedCategoriesList: string[] = [];
 
@@ -44,8 +61,33 @@
       return item1.name.localeCompare(item2.name);
     });
   }
+
+  onMount(async () => {
+  if (id) {
+    const itemRef = ref(database, 'items/' + id);
+    const snapshot = await get(itemRef);
+    
+    if (snapshot.exists()) {
+      const itemData = snapshot.val();
+      console.log(itemData)
+      for (let item of Object.keys(itemData)) {
+        const itemDetails = selectedItemsData[item];
+        if (itemDetails) {
+          selectedItems = [...selectedItems, itemDetails];
+          categories = [...categories, ...itemDetails.categories];
+        }
+      }
+      const categoriesSet: Set<string> = new Set(categories);
+      categories = Array.from(categoriesSet).sort();
+      console.log("hello", selectedItems)
+    } else {
+      console.log('No data available for this item id');
+    }
+  }
+});
 </script>
 
+<!-- svelte-ignore a11y-label-has-associated-control -->
 <label>Select a category:</label>
 <select bind:value={selectedCategory}>
   <option value="">-- select a category --</option>
@@ -75,3 +117,4 @@
     </div>
   {/each}
 </div>
+  
