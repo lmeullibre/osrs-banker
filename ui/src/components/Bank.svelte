@@ -7,7 +7,7 @@
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get("id");
 
-  console.log("MORENO", import.meta.env.VITE_DATABASE_URL);
+  console.log("MORENO", import.meta.env);
 
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_APP_API_KEY,
