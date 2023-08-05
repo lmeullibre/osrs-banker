@@ -1,40 +1,45 @@
 /// <reference types="vitest" />
-import {defineConfig} from 'vite'
-import {svelte} from '@sveltejs/vite-plugin-svelte'
-import * as path from 'path'
+import { defineConfig } from "vite";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import * as path from "path";
 
-const isTest = process.env.NODE_ENV === 'test'
+const isTest = process.env.NODE_ENV === "test";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
-      src: path.resolve(__dirname, './src'),
-      i18n: path.resolve(__dirname, './i18n')
+      src: path.resolve(__dirname, "./src"),
+      i18n: path.resolve(__dirname, "./i18n"),
     },
-    conditions: isTest ? ['browser'] : []
+    conditions: isTest ? ["browser"] : [],
   },
-  plugins: [svelte({hot: !process.env.VITEST})],
+  plugins: [svelte({ hot: !process.env.VITEST })],
   server: {
     port: isTest ? 8678 : 8000,
-    proxy: isTest ? undefined : {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: false
-      }
-    }
+    proxy: isTest
+      ? undefined
+      : {
+          "/api": {
+            target: "http://localhost:8080",
+            changeOrigin: false,
+          },
+        },
   },
   build: {
-    outDir: 'build',
-    target: 'es2020',
-    cssCodeSplit: false
+    outDir: "build",
+    target: "es2020",
+    cssCodeSplit: false,
   },
+  envDir: "../",
   optimizeDeps: {
-    include: isTest ? ['@testing-library/svelte', 'chai', 'sinon', 'sinon-chai'] : undefined
+    include: isTest
+      ? ["@testing-library/svelte", "chai", "sinon", "sinon-chai"]
+      : undefined,
   },
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: 'src/setup-tests.ts'
-  }
-})
+    environment: "jsdom",
+    setupFiles: "src/setup-tests.ts",
+  },
+});
